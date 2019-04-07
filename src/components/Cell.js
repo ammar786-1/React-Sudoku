@@ -6,8 +6,7 @@ export default function Cell({
   isActive,
   isEditable,
   isError,
-  onClick,
-  onKeyPress
+  onClick
 }) {
   const classNames = Object.entries({
     "cell-container": true,
@@ -26,12 +25,7 @@ export default function Cell({
   }
 
   return (
-    <div
-      className={classNames}
-      onClick={onCellClick}
-      onKeyDown={onKeyPress}
-      tabIndex="0"
-    >
+    <div className={classNames} onClick={onCellClick} tabIndex="0">
       <div className="cell-wrapper">
         <div className="cell">{value < 1 || value > 9 ? "" : value}</div>
       </div>

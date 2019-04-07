@@ -9,17 +9,30 @@ export default function Grid() {
   const [errorCells, setErrorCells] = useState([]);
 
   useEffect(() => {
-    async function random() {
-      const g = await getRandom();
-      setOrigGrid(g);
-      setGrid(g);
+    const localOrig = localStorage.getItem("origBoard");
+    const local = localStorage.getItem("board");
+    if (!localOrig) {
+      newBoard();
+      return;
     }
-    random();
+    const og = JSON.parse(localOrig);
+    setOrigGrid(og);
+    if (local) {
+      setGrid(JSON.parse(local));
+    } else setGrid(og);
   }, []);
 
   useEffect(() => {
     checkCollision(grid);
   }, [grid]);
+
+  async function newBoard() {
+    const g = await getRandom();
+    localStorage.setItem("origBoard", JSON.stringify(g));
+    localStorage.setItem("board", JSON.stringify(g));
+    setOrigGrid(g);
+    setGrid(g);
+  }
 
   function checkCollision(grid) {
     const err = [];
@@ -100,15 +113,22 @@ export default function Grid() {
   }
 
   function onKeyPress(e) {
-    const key = parseInt(e.key);
-    if (!Number.isInteger(key)) return;
+    let key;
+    if (e.key === "Backspace") {
+      key = null;
+    } else {
+      key = parseInt(e.key);
+      if (!Number.isInteger(key) || key <= 0) return;
+    }
+    e.preventDefault();
     const newGrid = grid.slice();
     newGrid[activeCell] = key;
+    localStorage.setItem("board", JSON.stringify(newGrid));
     setGrid(newGrid);
   }
 
   return (
-    <div className="Grid" onKeyPress={onKeyPress}>
+    <div className="Grid" onKeyDown={onKeyPress}>
       {Array(9)
         .fill(null)
         .map((_, i) => {
