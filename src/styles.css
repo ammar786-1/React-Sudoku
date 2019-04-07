@@ -1,9 +1,13 @@
+* {
+  box-sizing: border-box;
+}
+
 .App {
   font-family: sans-serif;
+  padding: 10px;
 }
 
 .Grid {
-  width: 60%;
 }
 
 .row {
@@ -103,4 +107,14 @@
   flex: 1;
   display: inline;
   text-align: center;
+}
+
+.Controls {
+  padding-top: 10px;
+}
+
+@media screen and (min-width: 48em) {
+  .Controls {
+    padding: 10px;
+  }
 }
