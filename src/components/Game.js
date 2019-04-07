@@ -139,6 +139,7 @@ export default function Game() {
         errorCells={errorCells}
         activeCell={activeCell}
         onCellClick={onCellClick}
+        onKeyPress={onKeyPress}
       />
       <Controls onClear={onClear} />
     </div>
