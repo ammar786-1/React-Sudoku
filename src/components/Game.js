@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Grid from "./Grid";
 import Controls from "./Controls";
+import { getRandom } from "../services/api";
 
 export default function Game() {
   const [origGrid, setOrigGrid] = useState([]);
