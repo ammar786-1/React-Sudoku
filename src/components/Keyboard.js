@@ -6,7 +6,7 @@ export default function Keyboard({ onClick }) {
   }
 
   return (
-    <div className="Keyboard pure-u-1">
+    <div className="Keyboard pure-u-1-3 pure-u-sm-1">
       <table className="pure-table pure-table-bordered">
         <tbody>
           <tr>

@@ -6,10 +6,10 @@ export default function Controls({ onClear, onKeyboardKeyClick }) {
     <div className="Controls pure-u-1 pure-u-sm-1-3 pure-g">
       <button
         type="button"
-        className="pure-button pure-u-1-3"
+        className="pure-button pure-u-1-3 pure-u-sm-1"
         onClick={onClear}
       >
-        Clear
+        Clear All
       </button>
       <div className="pure-u-1" />
       <Keyboard onClick={onKeyboardKeyClick} />
