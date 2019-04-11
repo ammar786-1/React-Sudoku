@@ -10,7 +10,7 @@ export default function Grid({
   activeCell
 }) {
   return (
-    <div className="Grid pure-u-1 pure-u-md-2-3" onKeyDown={onKeyPress}>
+    <div className="Grid pure-u-1 pure-u-sm-2-3" onKeyDown={onKeyPress}>
       {Array(9)
         .fill(null)
         .map((_, i) => {

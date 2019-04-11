@@ -122,6 +122,11 @@ export default function Game() {
       if (!Number.isInteger(key) || key <= 0) return;
     }
     e.preventDefault();
+    setKeyOnGrid(key);
+  }
+
+  function setKeyOnGrid(key) {
+    if (!activeCell) return;
     const newGrid = grid.slice();
     newGrid[activeCell] = key;
     localStorage.setItem("board", JSON.stringify(newGrid));
@@ -130,6 +135,14 @@ export default function Game() {
 
   function onClear() {
     setGrid(origGrid);
+  }
+
+  function onKeyboardKeyClick(key) {
+    if (key === "del") {
+      setKeyOnGrid(null);
+      return;
+    }
+    setKeyOnGrid(key);
   }
 
   return (
@@ -142,7 +155,7 @@ export default function Game() {
         onCellClick={onCellClick}
         onKeyPress={onKeyPress}
       />
-      <Controls onClear={onClear} />
+      <Controls onClear={onClear} onKeyboardKeyClick={onKeyboardKeyClick} />
     </div>
   );
 }
