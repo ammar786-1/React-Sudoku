@@ -28,7 +28,7 @@ export default function Keyboard({ onClick }) {
             <td />
             <td />
             <td onClick={_ => onClick("del")}>
-              <i class="fas fa-backspace" />
+              <i className="fas fa-backspace" />
             </td>
           </tr>
         </tbody>

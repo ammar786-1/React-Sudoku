@@ -131,3 +131,13 @@
     padding: 10px;
   }
 }
+
+ul.new-game {
+  list-style: none;
+  padding: 0;
+  margin: 1em 0 1em 0.8em;
+}
+
+ul.new-game > li {
+  padding: 0.2em;
+}

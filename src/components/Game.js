@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Grid from "./Grid";
 import Controls from "./Controls";
-import { getRandom } from "../services/api";
+import { getGrid, levels } from "../services/api";
+import { checkCollision } from "../services/game";
 
 export default function Game() {
+  const [random] = levels;
+
   const [origGrid, setOrigGrid] = useState([]);
   const [grid, setGrid] = useState(Array(81).fill(null));
   const [errorCells, setErrorCells] = useState([]);
   const [activeCell, setActiveCell] = useState(null);
+  const [showNewGame, setShowNewGame] = useState(true);
+  const [selectedNewGameLevel, setSelectedNewGameLevel] = useState(random);
+  const startButton = useRef(null);
 
   useEffect(() => {
     const localOrig = localStorage.getItem("origBoard");
@@ -24,89 +30,16 @@ export default function Game() {
   }, []);
 
   useEffect(() => {
-    checkCollision(grid);
+    const err = checkCollision(grid);
+    setErrorCells(err);
   }, [grid]);
 
   async function newBoard() {
-    const g = await getRandom();
+    const g = await getGrid(selectedNewGameLevel);
     localStorage.setItem("origBoard", JSON.stringify(g));
     localStorage.setItem("board", JSON.stringify(g));
     setOrigGrid(g);
     setGrid(g);
-  }
-
-  function checkCollision(grid) {
-    const err = [];
-
-    // column coliision
-    for (let col = 0; col < 9; col++) {
-      for (let row = 0; row < 9; row++) {
-        const idx = row * 9 + col;
-        const val = grid[idx];
-        if (!val) {
-          continue;
-        }
-        for (let tRow = 0; tRow < 9; tRow++) {
-          const tIdx = tRow * 9 + col;
-          const tVal = grid[tIdx];
-
-          if (tVal === val && idx !== tIdx) {
-            err.push(idx);
-          }
-        }
-      }
-    }
-
-    // row coliision
-    for (let row = 0; row < 9; row++) {
-      for (let col = 0; col < 9; col++) {
-        const idx = row * 9 + col;
-        const val = grid[idx];
-        if (!val) {
-          continue;
-        }
-        if (val === 0) {
-          continue;
-        }
-        for (let tCol = 0; tCol < 9; tCol++) {
-          const tIdx = row * 9 + tCol;
-          const tVal = grid[tIdx];
-          if (tVal === val && idx !== tIdx) {
-            err.push(idx);
-          }
-        }
-      }
-    }
-
-    //box collision
-    for (let r = 0; r < 3; r++) {
-      for (let c = 0; c < 3; c++) {
-        const valCache = [];
-        for (let br = 0; br < 3; br++) {
-          for (let bc = 0; bc < 3; bc++) {
-            const row = 3 * r + br;
-            const col = 3 * c + bc;
-            const idx = 9 * row + col;
-            const value = grid[idx];
-            if (!value) {
-              continue;
-            }
-            const cache = valCache[value];
-            if (cache && cache.length) {
-              if (cache.length === 1) {
-                err.push(cache[0]);
-              }
-              err.push(idx);
-              cache.push(idx);
-            } else {
-              valCache[value] = [idx];
-            }
-          }
-        }
-      }
-    }
-
-    setErrorCells(err);
   }
 
   function onCellClick(i) {
@@ -145,6 +78,33 @@ export default function Game() {
     setKeyOnGrid(key);
   }
 
+  function toggleNewGame() {
+    setShowNewGame(!showNewGame);
+  }
+
+  function newGameTypeChange(e) {
+    // console.log(e.currentTarget.value);
+    setSelectedNewGameLevel(e.currentTarget.value);
+  }
+
+  function capitalise(string) {
+    if (!string || !string.trim()) {
+      return "";
+    }
+    return string.substring(0, 1).toUpperCase() + string.substring(1);
+  }
+
+  async function startNewGame() {
+    if (startButton && startButton.current) {
+      startButton.current.disabled = true;
+    }
+    await newBoard();
+    if (startButton && startButton.current) {
+      startButton.current.disabled = false;
+    }
+    toggleNewGame();
+  }
+
   return (
     <div className="Game pure-g">
       <Grid
@@ -156,6 +116,65 @@ export default function Game() {
         onKeyPress={onKeyPress}
       />
       <Controls onClear={onClear} onKeyboardKeyClick={onKeyboardKeyClick} />
+      <div className="pure-u-1 pure-g" style={{ marginTop: "10px" }}>
+        {!showNewGame ? (
+          <button className="pure-button pure-u-1-3" onClick={toggleNewGame}>
+            New Game
+          </button>
+        ) : (
+          ""
+        )}
+        {showNewGame ? (
+          <div className="pure-g">
+            <ul className="new-game pure-u-1">
+              {levels.map(newGameType => {
+                return (
+                  <li>
+                    <label htmlFor={newGameType + "-new-game"}>
+                      <input
+                        id={newGameType + "-new-game"}
+                        type="radio"
+                        name="new-game"
+                        value={newGameType}
+                        onChange={newGameTypeChange}
+                        checked={newGameType === selectedNewGameLevel}
+                      />{" "}
+                      {capitalise(newGameType)}
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+            <div
+              className="pure-u-1-2 pure-u-sm-1-5"
+              style={{ padding: "10px" }}
+            >
+              <button
+                className="pure-button"
+                style={{ width: "100%" }}
+                onClick={startNewGame}
+                ref={startButton}
+              >
+                Start
+              </button>
+            </div>
+            <div
+              className="pure-u-1-2 pure-u-sm-1-5"
+              style={{ padding: "10px" }}
+            >
+              <button
+                className="pure-button"
+                style={{ width: "100%" }}
+                onClick={toggleNewGame}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }
