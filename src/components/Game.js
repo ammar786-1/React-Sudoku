@@ -11,7 +11,7 @@ export default function Game() {
   const [grid, setGrid] = useState(Array(81).fill(null));
   const [errorCells, setErrorCells] = useState([]);
   const [activeCell, setActiveCell] = useState(null);
-  const [showNewGame, setShowNewGame] = useState(true);
+  const [showNewGame, setShowNewGame] = useState(false);
   const [selectedNewGameLevel, setSelectedNewGameLevel] = useState(random);
   const startButton = useRef(null);
 
