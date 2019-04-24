@@ -6,7 +6,7 @@ export default function Controls({ onClear, onKeyboardKeyClick }) {
     <div className="Controls pure-u-1 pure-u-sm-1-3 pure-g">
       <button
         type="button"
-        className="pure-button pure-u-1-3 pure-u-sm-1"
+        className="pure-button pure-u-1-3 pure-u-sm-1 button-warning"
         onClick={onClear}
       >
         Clear All

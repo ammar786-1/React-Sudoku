@@ -118,7 +118,10 @@ export default function Game() {
       <Controls onClear={onClear} onKeyboardKeyClick={onKeyboardKeyClick} />
       <div className="pure-u-1 pure-g" style={{ marginTop: "10px" }}>
         {!showNewGame ? (
-          <button className="pure-button pure-u-1-3" onClick={toggleNewGame}>
+          <button
+            className="pure-button pure-u-1-3 button-success"
+            onClick={toggleNewGame}
+          >
             New Game
           </button>
         ) : (
