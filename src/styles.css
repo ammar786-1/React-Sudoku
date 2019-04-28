@@ -63,6 +63,22 @@
   border-bottom: 0.1em solid black;
 }
 
+.row:first-child > .cell-container:first-child {
+  border-top-left-radius: 8px;
+}
+
+.row:first-child > .cell-container:last-child {
+  border-top-right-radius: 8px;
+}
+
+.row:last-child > .cell-container:first-child {
+  border-bottom-left-radius: 8px;
+}
+
+.row:last-child > .cell-container:last-child {
+  border-bottom-right-radius: 8px;
+}
+
 .cell-container.editable {
   font-weight: normal;
   color: black;
